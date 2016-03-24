@@ -1,15 +1,15 @@
 // requestAnim shim layer by Paul Irish
     window.requestAnimFrame = (function(){
-      return  window.requestAnimationFrame       || 
-              window.webkitRequestAnimationFrame || 
-              window.mozRequestAnimationFrame    || 
-              window.oRequestAnimationFrame      || 
-              window.msRequestAnimationFrame     || 
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              window.oRequestAnimationFrame      ||
+              window.msRequestAnimationFrame     ||
               function(/* function */ callback, /* DOMElement */ element){
                 window.setTimeout(callback, 1000 / 60);
               };
     })();
-  
+
 
 // example code from mr doob : http://mrdoob.com/lab/javascript/requestanimationframe/
 
@@ -35,8 +35,14 @@ function animate() {
 function swapPhoto() {
 	//Add code here to access the #slideShow element.
 	//Access the img element and replace its source
-	//with a new image from your images array which is loaded 
+	//with a new image from your images array which is loaded
 	//from the JSON string
+  $('#slideShow .photoHolder img').attr('src',mImages[mCurrentIndex].imgPath);
+  $('#slideShow .details location').text('src',mImages[mCurrentIndex].imgLocation);
+  $('#slideShow .description location').text('src',mImages[mCurrentIndex].description);
+  $('#slideShow .date location').text('src',mImages[mCurrentIndex].date);
+  //console.log(mImages[0].location);
+  mCurrentIndex++;
 	console.log('swap photo');
 }
 
@@ -67,22 +73,45 @@ function makeGalleryImageOnloadCallback(galleryImage) {
 }
 
 $(document).ready( function() {
-	
+
 	// This initially hides the photos' metadata information
 	$('.details').eq(0).hide();
-	
+
 });
 
 window.addEventListener('load', function() {
-	
+
 	console.log('window loaded');
 
 }, false);
 
-function GalleryImage() {
+function GalleryImage(imgLocation, description, date, imgPath) {
 	//implement me as an object to hold the following data about an image:
 	//1. location where photo was taken
+  this.imgLocation = imgLocation;
 	//2. description of photo
+  this.description = description;
 	//3. the date when the photo was taken
+  this.date = date;
 	//4. either a String (src URL) or an an HTMLImageObject (bitmap of the photo. https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement)
+  this.imgPath = imgPath;
 }
+
+function reqListener () {
+  //console.log(JSON.parse(this.responseText));
+
+  var responseTextToJson = JSON.parse(this.responseText);
+  //console.log(responseTextToJson.images[0].imgPath);
+  for(var i = 0; i < responseTextToJson.images.length; i++) {
+   //console.log(responseTextToJson.images[i]);
+   var tempInfo = responseTextToJson.images[i];
+   mImages.push(tempInfo);
+
+ }
+ //var bob = GalleryImage("a","b","c","d");
+ console.log(mImages);
+}
+
+mRequest.addEventListener("load", reqListener);
+mRequest.open("GET", "images.json");
+mRequest.send();
