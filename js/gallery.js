@@ -37,13 +37,20 @@ function swapPhoto() {
 	//Access the img element and replace its source
 	//with a new image from your images array which is loaded
 	//from the JSON string
+  if(mCurrentIndex > mImages.length-1){
+    mCurrentIndex = 0;
+  }else if (mCurrentIndex < 0) {
+    mCurrentIndex = mImages.length-1;
+  }
+
+
   $('#slideShow .photoHolder img').attr('src',mImages[mCurrentIndex].imgPath);
   $('#slideShow .details location').text('src',mImages[mCurrentIndex].imgLocation);
   $('#slideShow .description location').text('src',mImages[mCurrentIndex].description);
   $('#slideShow .date location').text('src',mImages[mCurrentIndex].date);
   //console.log(mImages[0].location);
-  mCurrentIndex++;
 	console.log('swap photo');
+  mCurrentIndex++;
 }
 
 // Counter for the mImages array
@@ -105,11 +112,10 @@ function reqListener () {
   for(var i = 0; i < responseTextToJson.images.length; i++) {
    //console.log(responseTextToJson.images[i]);
    var tempInfo = responseTextToJson.images[i];
-   mImages.push(tempInfo);
+   var galleryImage = new GalleryImage(tempInfo.imgLocation,tempInfo.description,tempInfo.date,tempInfo.imgPath);
+   mImages.push(galleryImage);
 
  }
- //var bob = GalleryImage("a","b","c","d");
- console.log(mImages);
 }
 
 mRequest.addEventListener("load", reqListener);
