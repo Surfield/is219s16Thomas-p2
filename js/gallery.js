@@ -45,9 +45,9 @@ function swapPhoto() {
 
 
   $('#slideShow .photoHolder img').attr('src',mImages[mCurrentIndex].imgPath);
-  $('#slideShow .details location').text('src',mImages[mCurrentIndex].imgLocation);
-  $('#slideShow .description location').text('src',mImages[mCurrentIndex].description);
-  $('#slideShow .date location').text('src',mImages[mCurrentIndex].date);
+  $('#slideShow .details .location').text(mImages[mCurrentIndex].imgLocation);
+  $('#slideShow .details .description ').text(mImages[mCurrentIndex].description);
+  $('#slideShow .details .date ').text(mImages[mCurrentIndex].date);
   //console.log(mImages[0].location);
 	console.log('swap photo');
   mCurrentIndex++;
@@ -67,7 +67,7 @@ var mJson;
 
 // URL for the JSON to load by default
 // Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
-var mUrl = 'insert_url_here_to_image_json';
+var mUrl = "images.json";
 
 
 //You can optionally use the following function as your event callback for loading the source of Images from your json data (for HTMLImageObject).
@@ -83,6 +83,18 @@ $(document).ready( function() {
 
 	// This initially hides the photos' metadata information
 	$('.details').eq(0).hide();
+
+  $( "img.moreIndicator" ).click(function() {
+    if($(this).hasClass( "rot90" )){
+      $( this ).removeClass("rot90").addClass( "rot270" );
+      $( "div.details" ).fadeToggle( "slow", "linear" );
+    }else {
+      $( this ).removeClass("rot270").addClass( "rot90" );
+      $( "div.details" ).fadeToggle( "slow", "linear" );
+    }
+  });
+
+  $( "#nextPhoto").css({ "position": "absolute", "right": "0" });
 
 });
 
@@ -107,11 +119,11 @@ function GalleryImage(imgLocation, description, date, imgPath) {
 function reqListener () {
   //console.log(JSON.parse(this.responseText));
 
-  var responseTextToJson = JSON.parse(this.responseText);
+  var mJson = JSON.parse(this.responseText);
   //console.log(responseTextToJson.images[0].imgPath);
-  for(var i = 0; i < responseTextToJson.images.length; i++) {
+  for(var i = 0; i < mJson.images.length; i++) {
    //console.log(responseTextToJson.images[i]);
-   var tempInfo = responseTextToJson.images[i];
+   var tempInfo = mJson.images[i];
    var galleryImage = new GalleryImage(tempInfo.imgLocation,tempInfo.description,tempInfo.date,tempInfo.imgPath);
    mImages.push(galleryImage);
 
@@ -119,5 +131,5 @@ function reqListener () {
 }
 
 mRequest.addEventListener("load", reqListener);
-mRequest.open("GET", "images.json");
+mRequest.open("GET", mUrl);
 mRequest.send();
