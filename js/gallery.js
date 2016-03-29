@@ -32,6 +32,21 @@ function animate() {
 
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
+function getQueryParams(qs) {
+qs = qs.split("+").join(" ");
+var params = {},
+tokens,
+re = /[?&]?([^=]+)=([^&]*)/g;
+while (tokens = re.exec(qs)) {
+params[decodeURIComponent(tokens[1])]
+= decodeURIComponent(tokens[2]);
+}
+return params;
+}
+var $_GET = getQueryParams(document.location.search);
+console.log($_GET["json"]); // would output "John"
+
+
 function swapPhoto() {
 	//Add code here to access the #slideShow element.
 	//Access the img element and replace its source
@@ -43,11 +58,12 @@ function swapPhoto() {
     mCurrentIndex = mImages.length-1;
   }
 
+  console.log(mCurrentIndex)
 
   $('#slideShow .photoHolder img').attr('src',mImages[mCurrentIndex].imgPath);
-  $('#slideShow .details .location').text(mImages[mCurrentIndex].imgLocation);
-  $('#slideShow .details .description ').text(mImages[mCurrentIndex].description);
-  $('#slideShow .details .date ').text(mImages[mCurrentIndex].date);
+  $('#slideShow .details .location').text("Location: "+mImages[mCurrentIndex].imgLocation);
+  $('#slideShow .details .description ').text("Description: "+mImages[mCurrentIndex].description);
+  $('#slideShow .details .date ').text("Date: "+mImages[mCurrentIndex].date);
   //console.log(mImages[0].location);
 	console.log('swap photo');
   mCurrentIndex++;
@@ -67,7 +83,11 @@ var mJson;
 
 // URL for the JSON to load by default
 // Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
-var mUrl = "images.json";
+if($_GET["json"]== "images-short.json"){
+  var mUrl = "images-short.json";
+}else{
+  var mUrl = "images.json";
+}
 
 
 //You can optionally use the following function as your event callback for loading the source of Images from your json data (for HTMLImageObject).
@@ -95,6 +115,15 @@ $(document).ready( function() {
   });
 
   $( "#nextPhoto").css({ "position": "absolute", "right": "0" });
+
+  $( "#nextPhoto" ).click(function() {
+      swapPhoto()
+  });
+
+  $( "#prevPhoto" ).click(function() {
+      mCurrentIndex = mCurrentIndex- 2;
+      swapPhoto()
+  });
 
 });
 
