@@ -33,16 +33,14 @@ function animate() {
 /************* DO NOT TOUCH CODE ABOVE THIS LINE ***************/
 
 function getQueryParams(qs) {
-qs = qs.split("+").join(" ");
-var params = {},
-tokens,
-re = /[?&]?([^=]+)=([^&]*)/g;
-while (tokens = re.exec(qs)) {
-params[decodeURIComponent(tokens[1])]
-= decodeURIComponent(tokens[2]);
+  qs = qs.split("+").join(" ");
+  var params = {}, tokens, re = /[?&]?([^=]+)=([^&]*)/g;
+  while (tokens = re.exec(qs)) {
+    params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+  }
+  return params;
 }
-return params;
-}
+
 var $_GET = getQueryParams(document.location.search);
 console.log($_GET["json"]); // would output "John"
 
@@ -83,11 +81,7 @@ var mJson;
 
 // URL for the JSON to load by default
 // Some options for you are: images.json, images.short.json; you will need to create your own extra.json later
-if($_GET["json"]== "images-short.json"){
-  var mUrl = "images-short.json";
-}else{
-  var mUrl = "images.json";
-}
+var mUrl = $_GET["json"];
 
 
 //You can optionally use the following function as your event callback for loading the source of Images from your json data (for HTMLImageObject).
@@ -114,15 +108,17 @@ $(document).ready( function() {
     }
   });
 
+  $(".moreIndicator.rot90").css({ "position": "relative","left": "47%", "top": "-60px"});
+
   $( "#nextPhoto").css({ "position": "absolute", "right": "0" });
 
   $( "#nextPhoto" ).click(function() {
-      swapPhoto()
+      swapPhoto();
   });
 
   $( "#prevPhoto" ).click(function() {
       mCurrentIndex = mCurrentIndex- 2;
-      swapPhoto()
+      swapPhoto();
   });
 
 });
@@ -147,16 +143,19 @@ function GalleryImage(imgLocation, description, date, imgPath) {
 
 function reqListener () {
   //console.log(JSON.parse(this.responseText));
-
-  var mJson = JSON.parse(this.responseText);
-  //console.log(responseTextToJson.images[0].imgPath);
-  for(var i = 0; i < mJson.images.length; i++) {
-   //console.log(responseTextToJson.images[i]);
-   var tempInfo = mJson.images[i];
-   var galleryImage = new GalleryImage(tempInfo.imgLocation,tempInfo.description,tempInfo.date,tempInfo.imgPath);
-   mImages.push(galleryImage);
-
- }
+  try{
+    var mJson = JSON.parse(this.responseText);
+    for(var i = 0; i < mJson.images.length; i++) {
+      //console.log(responseTextToJson.images[i]);
+      var tempInfo = mJson.images[i];
+      var galleryImage = new GalleryImage(tempInfo.imgLocation,tempInfo.description,tempInfo.date,tempInfo.imgPath);
+      mImages.push(galleryImage);
+    }
+  }catch(error){
+    mRequest.addEventListener("load", reqListener);
+    mRequest.open("GET","images.json");
+    mRequest.send();
+  }
 }
 
 mRequest.addEventListener("load", reqListener);

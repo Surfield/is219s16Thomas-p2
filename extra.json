@@ -1,0 +1,34 @@
+{
+    "images": [
+        {
+            "imgPath": "img/surf/profile.jpg",
+            "imgLocation": "New Jersey",
+            "description": "Surf's Main Profile Pic",
+            "date": "08/26/2013"
+        },
+        {
+            "imgPath": "img/surf/gta.jpg",
+            "imgLocation": "New York",
+            "description": "EDMTML meets GTA",
+            "date": "09/13/2014"
+        },
+        {
+            "imgPath": "img/surf/hallow2.png",
+            "imgLocation": "Manville, NJ",
+            "description": "LL Halloween Party Flyer",
+            "date": "10/18/2014"
+        },
+        {
+            "imgPath": "img/surf/HOTDOTProductline.png",
+            "imgLocation": "RVCC",
+            "description": "RVCC Marketing Class Product",
+            "date": "10/13/2014"
+        },
+        {
+            "imgPath": "img/surf/fishbaitgamescreen.png",
+            "imgLocation": "RVCC",
+            "description": "RVCC Game Creation Class Concept",
+            "date": "12/10/2013"
+        }
+  ]
+}

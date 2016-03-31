@@ -120,3 +120,6 @@ Make it animate nicely. You'll need CSS3 for this*/
 	/* Standard */
 	transition: all 1s ease;
 }
+
+.moreIndicator .rot90{
+}
